@@ -83,8 +83,8 @@ class EmployeeController extends Controller {
      */
     public function edit($id)
     {
-        $employee = Stock::find($id);
-        return view('employee.edit', compact('employee'));  // -> resources/views/stocks/edit.blade.php
+        $employee = Employee::getEmployee($id);
+        return view('employee.edit', compact('employee'));
     }
 
     /**
@@ -96,20 +96,29 @@ class EmployeeController extends Controller {
      */
     public function update(Request $request, $id)
     {
-        // Validation for required fields (and using some regex to validate our numeric value)
-        $request->validate([
-            'stock_name'=>'required',
-            'ticket'=>'required',
-            'value'=>'required|max:10|regex:/^-?[0-9]+(?:\.[0-9]{1,2})?$/'
-        ]);
-        $stock = Stock::find($id);
-        // Getting values from the blade template form
-        $stock->stock_name =  $request->get('stock_name');
-        $stock->ticket = $request->get('ticket');
-        $stock->value = $request->get('value');
-        $stock->save();
+        $url = 'https://dummy.restapiexample.com/api/v1/update/' . $id;
 
-        return redirect('/employees')->with('success', 'Stock updated.'); // -> resources/views/stocks/index.blade.php
+        $headers = ['Content-Type: application/json'];
+
+        $post_data = response()->json([
+            'name' => $request->get('name'),
+            'salary' => $request->get('salary'),
+            'age' => $request->get('age')
+        ]);
+
+        $data_json = json_encode($post_data, JSON_THROW_ON_ERROR);
+
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_VERBOSE, 1);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $data_json);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_PUT, true);
+        $result = curl_exec($curl);
+        curl_close($curl);
+
+        return redirect('/employees')->with('success', 'Employee updated. '  . $result);
     }
 
     /**
@@ -120,7 +129,27 @@ class EmployeeController extends Controller {
      */
     public function destroy($id)
     {
-        return redirect('/employees')->with('success', 'Employee removed.');
+        $url = 'https://dummy.restapiexample.com/api/v1/update/' . $id;
+
+        $headers = ['Content-Type: application/json'];
+
+        $post_data = response()->json([
+
+        ]);
+
+        $data_json = json_encode($post_data, JSON_THROW_ON_ERROR);
+
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_VERBOSE, 1);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $data_json);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_PUT, true);
+        $result = curl_exec($curl);
+        curl_close($curl);
+
+        return redirect('/employees')->with('success', 'Employee removed.'  . $result);
     }
 
 }

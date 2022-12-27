@@ -22,3 +22,6 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::resource('employees', EmployeeController::class);
+
+Route::get('/excel/create', [App\Http\Controllers\ExcelController::class, 'createDocument'])->name('excel');
+Route::get('/watermark', [App\Http\Controllers\WatermarkController::class, 'watermark'])->name('watermark');

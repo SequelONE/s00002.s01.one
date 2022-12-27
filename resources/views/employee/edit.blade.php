@@ -16,23 +16,22 @@
                     </div>
                     <br />
                 @endif
-                <form method="post" action="{{ route('employees.update', $employee->id) }}">
-                    @method('PATCH')
+                <form method="post" action="{{ route('employees.update', $employee['id']) }}">
+                    @method('PUT')
                     @csrf
                     <div class="form-group">
-
-                        <label for="stock_name">Name:*</label>
-                        <input type="text" class="form-control" name="name" value="{{ $employee->name }}" />
+                        <label for="name">Name:*</label>
+                        <input type="text" class="form-control" name="name" value="{{ $employee['employee_name'] }}" />
                     </div>
 
                     <div class="form-group">
-                        <label for="ticket">Salary:*</label>
-                        <input type="text" class="form-control" name="salary" value="{{ $employee->salary }}" />
+                        <label for="salary">Salary:*</label>
+                        <input type="text" class="form-control" name="salary" value="{{ $employee['employee_salary'] }}" />
                     </div>
 
                     <div class="form-group">
-                        <label for="value">Age:</label>
-                        <input type="text" class="form-control" name="age" value="{{ $employee->value }}" />
+                        <label for="age">Age:</label>
+                        <input type="text" class="form-control" name="age" value="{{ $employee['employee_age'] }}" />
                     </div>
                     <button type="submit" class="btn btn-primary">Update</button>
                 </form>
